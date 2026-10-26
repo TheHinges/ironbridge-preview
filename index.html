@@ -111,6 +111,15 @@ footer .brand{font-size:1.1rem}
 }
 .pill{white-space:normal;display:inline-block;max-width:100%;line-height:1.3;margin:4px 0 0;overflow-wrap:anywhere}
 td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px;text-align:center;min-width:0;flex:0 1 auto}
+.stepper{max-width:640px;margin:0 auto}.stepper .step{padding:18px}
+.dots{display:flex;gap:6px;margin:0 0 14px}.dots span{flex:1;height:6px;border-radius:3px;background:var(--color_border)}.dots span.on{background:var(--color_accent_orange,#E07B1F)}
+.bigrow{gap:14px}.bigbtn{display:block;width:100%;text-align:left;padding:22px 18px;border:2px solid var(--color_primary);border-radius:8px;background:var(--color_surface);cursor:pointer;font:inherit;color:inherit}
+.bigbtn b{display:block;font-family:var(--font_heading);text-transform:uppercase;letter-spacing:.03em;font-size:1.35rem;color:var(--color_primary);margin-bottom:6px}.bigbtn span{color:var(--muted)}
+.bigbtn:hover,.bigbtn:focus{background:var(--color_primary);}.bigbtn:hover b,.bigbtn:hover span,.bigbtn:focus b,.bigbtn:focus span{color:#fff}
+.navrow{display:flex;justify-content:space-between;gap:12px;margin-top:16px}.navrow .btn{flex:1;min-height:48px}
+.stepper .field input,.stepper .field select,.stepper .field textarea{min-height:48px;font-size:16px;width:100%;box-sizing:border-box}
+.stepper textarea{font:inherit;padding:10px;border:1px solid var(--color_border);border-radius:6px}
+.stepper .seg{margin-bottom:12px}.stepper .chk{display:flex;gap:10px;align-items:center;min-height:40px}
 </style>
 </head>
 <body>
@@ -243,65 +252,46 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
 <!-- BOOK -->
 <div data-page="book" class="hide"><section class="block"><div class="wrap">
   <div class="rule"></div><h2>Book service</h2>
-  <p class="foot">Model flow only: nothing is sent or saved. You don't need to know your engine or options; the tech confirms everything. Prices are estimates.</p>
-  <div id="bookForm">
-    <div class="step"><h3><span class="num">1</span>Your vehicle</h3>
-      <div class="grid g3" id="modelCards"></div>
-      <div class="grid g2" style="margin-top:14px" id="lrYM">
-        <div class="field"><label for="f_year">Year</label><select id="f_year" disabled><option value="">Pick a model first</option></select></div>
-        <div class="field"><label for="f_mileage">Current mileage (required)</label><input id="f_mileage" type="number" min="0" inputmode="numeric" placeholder="e.g. 68400"></div>
+  <p class="foot">A few quick steps. Nothing is sent or saved in this preview. Prices are estimates; your technician confirms everything.</p>
+  <div id="bookForm" class="stepper">
+    <div class="dots" id="dots"></div>
+    <div class="step" data-st="1"><h3><span class="num">1</span>What do you need?</h3>
+      <div class="grid g2 bigrow">
+        <button type="button" class="bigbtn" data-kind="service"><b>Scheduled service</b><span>Oil, fluids, filters: what's due at your mileage</span></button>
+        <button type="button" class="bigbtn" data-kind="diag"><b>Diagnosis / repair</b><span>Warning light, noise, leak or something not right</span></button>
       </div></div>
-    <div class="step hide" id="sO"><h3><span class="num">2</span>General service request: other European vehicle</h3>
-      <p class="foot">Routine and annual service only. We review your request and call with a quote; no prices are shown online. For anything beyond routine service, please call us.</p>
-      <div class="grid g2">
-        <div class="field"><label for="o_make">Make</label><input id="o_make" placeholder="e.g. Porsche, BMW, Jaguar, Mercedes-Benz"></div>
-        <div class="field"><label for="o_model">Model</label><input id="o_model" placeholder="e.g. Cayenne"></div>
-        <div class="field"><label for="o_year">Year</label><input id="o_year" inputmode="numeric" placeholder="e.g. 2018"></div>
-        <div class="field"><label for="o_miles">Current mileage</label><input id="o_miles" inputmode="numeric" placeholder="e.g. 54000"></div>
+    <div class="step hide" data-st="2"><h3><span class="num">2</span>Your vehicle</h3>
+      <div class="seg"><button type="button" class="btn btn-secondary btn-sm on" data-vm="vin">Enter VIN</button><button type="button" class="btn btn-secondary btn-sm" data-vm="manual">Select year / make / model</button></div>
+      <div id="vinBox"><div class="field"><label for="b_vin">VIN (17 characters)</label><input id="b_vin" maxlength="17" autocapitalize="characters" placeholder="SALGS2SE..."></div>
+        <button type="button" class="btn btn-primary btn-sm" id="b_decode">Look up my vehicle</button><p class="foot" id="b_vinNote"></p></div>
+      <div id="manBox" class="hide">
+        <div class="field"><label for="b_year">Year</label><select id="b_year"></select></div>
+        <div class="field"><label for="b_make">Make</label><select id="b_make"><option value="">Select make</option><option>Land Rover</option><option>Jaguar</option><option>Porsche</option><option>BMW</option><option>Mercedes-Benz</option></select></div>
+        <div class="field" id="b_modelWrap"><label for="b_model">Model</label><select id="b_model"></select></div>
+        <div class="field" id="b_modelTxtWrap"><label for="b_modelTxt">Model</label><input id="b_modelTxt" placeholder="e.g. Cayenne, X5, F-Pace"></div>
+        <div class="field" id="b_engWrap"><label for="b_engine">Engine</label><select id="b_engine"></select></div>
       </div>
-      <div class="field"><label>Annual-service items (quoted after review)</label><div id="o_items"></div></div>
-      <div class="grid g3">
-        <div class="field"><label for="o_day">Preferred day</label><select id="o_day"></select></div>
-        <div class="field"><label for="o_name">Name</label><input id="o_name" autocomplete="off"></div>
-        <div class="field"><label for="o_contact">Phone or email</label><input id="o_contact" autocomplete="off"></div>
-      </div>
-      <div class="notice"><strong>Turnaround.</strong> <span class="turn-annual"></span> Exact time confirmed when we call with your quote.</div>
-      <button class="btn btn-primary" id="oReq" type="button" disabled>Request general service quote</button></div>
-    <div class="step hide" id="s2"><h3><span class="num">2</span>Engine and options (optional)</h3>
-      <div class="grid g3">
-        <div class="field"><label for="f_engine">Engine</label><select id="f_engine"></select></div>
-        <div class="field" id="airWrap"><label for="f_air">Air suspension</label><select id="f_air"><option value="not_sure">Not sure — we'll check</option><option value="yes">Yes</option><option value="no">No (coil springs)</option></select></div>
-        <div class="field"><label for="f_vin">VIN (optional)</label><input id="f_vin" placeholder="SAL..." maxlength="17"></div>
-      </div>
-      <button class="btn btn-secondary btn-sm" id="vinBtn" type="button">Prefill from VIN</button>
-      <p class="foot" id="vinNote"></p></div>
-    <div class="step hide" id="s3"><h3><span class="num">3</span>Anything you've noticed? (optional)</h3>
-      <div class="grid g2"><div id="symptoms"></div>
-        <div class="field"><label for="f_last">Last serviced</label><select id="f_last"></select></div></div></div>
-    <div class="step hide" id="s4"><h3><span class="num">4</span>Services</h3>
-      <p class="foot">Suggestions are based on your answers; your technician confirms everything. Engine-specific jobs appear once an engine is chosen or the tech confirms it.</p>
-      <div id="recs"></div>
-      <div class="seg"><button class="btn btn-secondary btn-sm on" data-grp="Maintenance">Maintenance</button><button class="btn btn-secondary btn-sm" data-grp="Common repairs">Common repairs</button></div>
-      <div class="tablewrap"><table id="svcTable"></table></div></div>
-    <div class="step hide" id="s5"><h3><span class="num">5</span>Time and contact</h3>
-      <div class="tablewrap"><table id="totTable"></table></div>
-      <div class="grid g2" style="margin-top:12px"><div class="card"><b>Visit type:</b> <span id="vtype"></span></div><div class="card"><b>Fully booked for this visit type:</b> <span id="fullDays"></span></div></div>
-      <div class="notice"><strong>Turnaround.</strong> <span id="turnSel"></span></div>
-      <p id="limitedNote" class="foot hide">Limited availability: this is the last annual-service spot that day.</p>
-      <div class="grid g3">
-        <div class="field"><label for="f_day">Day</label><select id="f_day"></select></div>
-        <div class="field"><label for="f_start">Start time</label><select id="f_start" disabled></select></div>
-        <div class="field"><label>Block</label><div class="card" id="block" style="padding:10px 12px"></div></div>
-      </div>
-      <div class="notice warn hide" id="overClose"></div>
-      <div class="grid g3">
-        <div class="field"><label for="f_name">Name</label><input id="f_name" autocomplete="off"></div>
-        <div class="field"><label for="f_phone">Phone</label><input id="f_phone" autocomplete="off"></div>
-        <div class="field"><label for="f_email">Email</label><input id="f_email" autocomplete="off"></div>
-      </div>
-      <button class="btn btn-primary" id="reqBtn" type="button" disabled>Request appointment</button></div>
+      <div class="notice" id="b_vehSum"></div>
+      <div class="navrow"><button type="button" class="btn btn-secondary" data-back>Back</button><button type="button" class="btn btn-primary" id="b_next2" disabled>Next</button></div></div>
+    <div class="step hide" data-st="3"><h3><span class="num">3</span>Current mileage</h3>
+      <div class="field"><label for="b_miles">Mileage (required)</label><input id="b_miles" type="number" min="0" inputmode="numeric" placeholder="e.g. 48000"></div>
+      <div class="navrow"><button type="button" class="btn btn-secondary" data-back>Back</button><button type="button" class="btn btn-primary" id="b_next3" disabled>Next</button></div></div>
+    <div class="step hide" data-st="4"><h3 id="b_h4"><span class="num">4</span>Your service</h3>
+      <div id="svcBox"><p class="foot" id="b_svcIntro"></p><div class="tablewrap"><table id="b_items"></table></div><p class="foot" id="b_tbc"></p><div class="notice" id="b_notes"></div>
+        <div class="field"><label for="b_extra">Anything else you think it needs?</label><textarea id="b_extra" rows="3" placeholder="Optional"></textarea></div></div>
+      <div id="diagBox"><div id="b_sym"></div>
+        <div class="field"><label for="b_desc">Describe what's happening</label><textarea id="b_desc" rows="4" placeholder="When it happens, any warning messages, sounds..."></textarea></div>
+        <div class="notice"><span class="turn-diag"></span> One diagnosis or repair vehicle is booked per day.</div></div>
+      <div class="navrow"><button type="button" class="btn btn-secondary" data-back>Back</button><button type="button" class="btn btn-primary" id="b_next4">Next</button></div></div>
+    <div class="step hide" data-st="5"><h3><span class="num">5</span>Day and contact</h3>
+      <div class="field"><label for="b_day">Preferred day</label><select id="b_day"></select></div>
+      <p class="foot" id="b_dayNote"></p>
+      <div class="field"><label for="b_name">Name</label><input id="b_name" autocomplete="off"></div>
+      <div class="field"><label for="b_contact">Phone or email</label><input id="b_contact" autocomplete="off"></div>
+      <div class="navrow"><button type="button" class="btn btn-secondary" data-back>Back</button><button type="button" class="btn btn-primary" id="reqBtn" disabled>Request appointment</button></div></div>
   </div>
-  <div id="preview" class="hide"><div class="notice"><strong>Request preview — nothing was sent.</strong><p id="previewText"></p></div><button class="btn btn-secondary" id="restart" type="button">Start over</button></div>
+  
+<div id="preview" class="hide"><div class="notice"><strong>Request preview — nothing was sent.</strong><p id="previewText"></p></div><button class="btn btn-secondary" id="restart" type="button">Start over</button></div>
 
 </div></section></div>
 </main>
@@ -415,91 +405,104 @@ go("home");
 // Pricing tab
 table($("priceTable"),["Job (estimate)","Hours","Our price","Dealer est.","Difference"],JOBS.map(function(j){var ours=j.hrs*RATE+j.parts,dl=j.hrs*DEALER+j.parts*DEALER_PARTS;return [j.job,j.hrs.toFixed(1),usd(ours),usd(dl),usd(dl-ours)];}),[1,2,3,4]);
 
-// Booking state
-var st={vehicle_model:"",model_year:"",engine:NOT_SURE,air_suspension:NOT_SURE,symptoms:[],last_serviced:NOT_SURE,picked:[],grp:"Maintenance",day:"",start:""};
-var mc=$("modelCards");
-var O_ITEMS=["Oil and filter service + inspection","Brake fluid","Cabin air filter","Engine air filter","Spark plugs","Other fluids (coolant, transmission, differential)"];
-(function(){var w=$("o_items");O_ITEMS.forEach(function(n){var l=document.createElement("label");l.className="chk";l.innerHTML='<input type="checkbox" value="'+esc(n)+'"> '+esc(n);w.appendChild(l);});
- ["o_make","o_model","o_year","o_miles","o_name","o_contact"].forEach(function(id){$(id).oninput=render;});w.onchange=render;$("o_day").onchange=render;
- $("oReq").onclick=function(){var it=[].map.call(document.querySelectorAll("#o_items input:checked"),function(x){return x.value;});$("previewText").textContent=$("o_name").value+": general service request for a "+$("o_year").value+" "+$("o_make").value+" "+$("o_model").value+", "+$("o_miles").value+" mi. Requested: "+it.join("; ")+". Preferred day: "+dayLabel($("o_day").value)+". No price shown: on the live site the shop would review this and contact you at "+$("o_contact").value+" with a quote. This draft did not send or save anything.";$("bookForm").classList.add("hide");$("preview").classList.remove("hide");};})();
-GENS.forEach(function(g){var b=document.createElement("button");b.type="button";b.className="card mcard";b.setAttribute("data-model",g.id);b.innerHTML='<div class="ph">Photo to come</div><div class="t">'+esc(g.plain)+"</div>";b.onclick=function(){pickModel(g.id);};mc.appendChild(b);});
-(function(){var b=document.createElement("button");b.type="button";b.className="card mcard";b.setAttribute("data-model","other_euro");b.innerHTML='<div class="ph">Jaguar · Porsche · BMW · Mercedes-Benz</div><div class="t">Other European vehicle</div>';b.onclick=pickOther;mc.appendChild(b);})();
-var symEl=$("symptoms");SYMPTOMS.forEach(function(s){var l=document.createElement("label");l.className="chk";l.innerHTML='<input type="checkbox" value="'+s.id+'"> '+esc(s.label);l.querySelector("input").onchange=function(e){if(e.target.checked)st.symptoms.push(s.id);else st.symptoms=st.symptoms.filter(function(x){return x!==s.id;});render();};symEl.appendChild(l);});
-LAST_SERVICED.forEach(function(o){var op=document.createElement("option");op.value=o.value;op.textContent=o.label;$("f_last").appendChild(op);});$("f_last").value=NOT_SURE;
-$("f_last").onchange=function(e){st.last_serviced=e.target.value;render();};
-function gen(){return GENS.filter(function(g){return g.id===st.vehicle_model;})[0];}
-function pickOther(){st.vehicle_model="other_euro";st.picked=[];render();}
-function renderOther(){
- $("lrYM").classList.add("hide");["s2","s3","s4","s5"].forEach(function(id){$(id).classList.add("hide");});$("sO").classList.remove("hide");
- function full(d){return BOOKED.filter(function(a){return a.day===d&&a.kind==="annual_service";}).length>=CAPACITY.capacity_annual_max;}
- var cur=$("o_day").value;$("o_day").innerHTML='<option value="">Pick a day</option>'+DAYS.filter(function(d){return !full(d);}).map(function(d){return '<option value="'+d+'"'+(d===cur?" selected":"")+">"+dayLabel(d)+"</option>";}).join("");
- var n=document.querySelectorAll("#o_items input:checked").length;
- $("oReq").disabled=!(n&&$("o_make").value.trim()&&$("o_model").value.trim()&&$("o_year").value.trim()&&$("o_miles").value.trim()&&$("o_day").value&&$("o_name").value.trim()&&$("o_contact").value.trim());}
-function pickModel(id){$("lrYM").classList.remove("hide");$("sO").classList.add("hide");st.vehicle_model=id;st.model_year="";st.engine=NOT_SURE;st.air_suspension=NOT_SURE;st.picked=[];st.start="";
- var g=gen();var y=$("f_year");y.disabled=false;y.innerHTML='<option value="">Select year</option>'+g.years.map(function(v){return "<option>"+v+"</option>";}).join("");
- $("f_engine").innerHTML='<option value="not_sure">Not sure — we\'ll check</option>'+g.engines.map(function(e){return '<option value="'+e.id+'">'+esc(e.label)+"</option>";}).join("");
- $("f_air").value=NOT_SURE;$("airWrap").innerHTML=g.air==="opt"?'<label for="f_air">Air suspension</label><select id="f_air"><option value="not_sure">Not sure — we\'ll check</option><option value="yes">Yes</option><option value="no">No (coil springs)</option></select>':'<label>Air suspension</label><div class="card" style="padding:10px 12px">Standard on this model</div>';
- if($("f_air"))$("f_air").onchange=function(e){st.air_suspension=e.target.value;st.picked=[];st.start="";render();};
- render();}
-$("f_year").onchange=function(e){st.model_year=e.target.value;render();};
-$("f_mileage").oninput=render;
-$("f_engine").onchange=function(e){st.engine=e.target.value;st.picked=[];st.start="";render();};
-$("f_vin").oninput=function(e){e.target.value=e.target.value.toUpperCase().replace(/\s/g,"");render();};
-$("vinBtn").onclick=function(){var v=$("f_vin").value,err=vinErr(v);if(err||!v){$("vinNote").textContent=err||"Enter a 17-character VIN first.";return;}var d=stubDecodeVin(v),g=gen();if(d.model_year&&g&&g.years.indexOf(+d.model_year)>=0){st.model_year=d.model_year;$("f_year").value=d.model_year;}st.engine=d.engine;$("f_engine").value=d.engine;st.air_suspension=d.air_suspension;if($("f_air").tagName)$("f_air").value=d.air_suspension;$("vinNote").textContent="From your VIN: "+(d.model_year?"year "+d.model_year+" read from the VIN":"year not read")+"; engine and air suspension left as \"Not sure — we'll check\". A real decoder is not connected.";render();};
-document.querySelectorAll("[data-grp]").forEach(function(b){b.onclick=function(){st.grp=b.getAttribute("data-grp");document.querySelectorAll("[data-grp]").forEach(function(x){x.classList.toggle("on",x===b);});render();};});
-function toggleSvc(id){st.picked=st.picked.indexOf(id)>=0?st.picked.filter(function(x){return x!==id;}):st.picked.concat([id]);st.start="";render();}
-document.addEventListener("click",function(e){var b=e.target.closest("[data-svc]");if(b)toggleSvc(b.getAttribute("data-svc"));});
-$("f_day").onchange=function(e){st.day=e.target.value;st.start="";render();};
-$("f_start").onchange=function(e){st.start=e.target.value;render();};
-["f_name","f_phone","f_email"].forEach(function(id){$(id).oninput=render;});
-
-var calc={};
-function render(){
- var g=gen();
- document.querySelectorAll("[data-model]").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-model")===st.vehicle_model);});
- if(st.vehicle_model==="other_euro"){renderOther();return;}
- ["s2","s3","s4"].forEach(function(id){$(id).classList.toggle("hide",!g);});
- if(!g){$("s5").classList.add("hide");return;}
- var e=g.engines.filter(function(x){return x.id===st.engine;})[0],tag=e?e.tag:"unknown";
- var hasAir=g.air==="std"?true:st.air_suspension!=="no";
- var svcs=services(tag,g.id,hasAir);
- st.picked=st.picked.filter(function(id){return svcs.some(function(s){return s.id===id;});});
- var mv=$("f_mileage").value,miles=parseInt(mv,10),mileOk=mv!==""&&isFinite(miles)&&miles>=0;
- var answers={mileage:mileOk?miles:0,symptoms:st.symptoms,last_serviced:st.last_serviced,history:getServiceHistory($("f_vin").value)};
- var rec=[];PLACEHOLDER_RULES.forEach(function(r){if(r.test(answers))r.services.forEach(function(id){if(rec.indexOf(id)<0&&svcs.some(function(s){return s.id===id;}))rec.push(id);});});
- function name(id){return svcs.filter(function(s){return s.id===id;})[0].name;}
- function addBtn(id){var on=st.picked.indexOf(id)>=0;return {html:'<button type="button" class="btn '+(on?"btn-primary":"btn-secondary")+' btn-sm" data-svc="'+id+'">'+(on?"Added":"Add")+"</button>"};}
- if(rec.length){var r=$("recs");r.innerHTML='<div class="tablewrap" style="margin-bottom:12px"><table id="recTable"></table></div>';table($("recTable"),["Suggested service","Status",""],rec.map(function(id){return [name(id),{html:'<span class="pill">Recommended — tech will confirm</span>'},addBtn(id)];}));}else $("recs").innerHTML="";
- table($("svcTable"),["Service","Hrs (est.)","Our est.","Dealer est. (parts 2.1x, estimate)",""],svcs.filter(function(s){return s.group===st.grp;}).map(function(s){return [rec.indexOf(s.id)>=0?{html:esc(s.name)+'<span class="pill">Recommended — tech will confirm</span>'}:s.name,s.hrs.toFixed(1),money(s.hrs*RATE+s.parts),money(s.hrs*DEALER+s.parts*DEALER_PARTS),addBtn(s.id)];}),[1,2,3]);
- var chosen=svcs.filter(function(s){return st.picked.indexOf(s.id)>=0;});
- $("s5").classList.toggle("hide",!chosen.length);
- var hrsT=chosen.reduce(function(a,s){return a+s.hrs;},0),partsT=chosen.reduce(function(a,s){return a+s.parts;},0);
- var laborT=hrsT*RATE,dLabor=hrsT*DEALER,dParts=partsT*DEALER_PARTS,dur=Math.max(30,Math.ceil(hrsT*2)*30);
- table($("totTable"),["Estimate","Ours ($175/hr)","Dealer est. $295/hr, parts 2.1x (estimate)"],[["Parts",money(partsT),money(dParts)],["Labor ("+hrsT.toFixed(1)+" hrs)",money(laborT),money(dLabor)],[{html:"<b>Total before tax</b>"},{html:"<b>"+money(partsT+laborT)+"</b>"},money(dParts+dLabor)]],[1,2]);
- var btype=chosen.some(function(s){return svcClass(s.id)==="diag_repair";})?"diag_repair":"annual_service";
- function countKind(d,k){return BOOKED.filter(function(a){return a.day===d&&a.kind===k;}).length;}
- function dayFull(d){return btype==="diag_repair"?countKind(d,"diag_repair")>=CAPACITY.capacity_diag:countKind(d,"annual_service")>=CAPACITY.capacity_annual_max;}
- function dayLimited(d){return btype==="annual_service"&&countKind(d,"annual_service")>=CAPACITY.capacity_annual_ideal&&!dayFull(d);}
- function freeBay(d,s){for(var b=1;b<=2;b++){if(!BOOKED.some(function(a){return a.day===d&&a.bay===b&&s<a.start+a.dur&&a.start<s+dur;}))return b;}return 0;}
- $("vtype").textContent=btype==="diag_repair"?"Diagnosis / repair (1 per day)":"Annual service (up to 3 per day)";
- var full=DAYS.filter(dayFull).map(dayLabel);$("fullDays").textContent=full.length?full.join(", "):"None in the next two weeks";
- $("turnSel").textContent=btype==="diag_repair"?DIAG_NOTICE:ANNUAL_NOTICE;
- if(st.day&&dayFull(st.day)){st.day="";st.start="";}
- $("f_day").innerHTML='<option value="">Pick a day</option>'+DAYS.filter(function(d){return !dayFull(d);}).map(function(d){return '<option value="'+d+'"'+(d===st.day?" selected":"")+">"+dayLabel(d)+(dayLimited(d)?" (limited: last annual-service spot)":"")+"</option>";}).join("");
- $("limitedNote").classList.toggle("hide",!(st.day&&dayLimited(st.day)));
- var starts=st.day?SLOTS.filter(function(s){return freeBay(st.day,s)>0;}):[];
- if(st.start&&starts.indexOf(+st.start)<0)st.start="";
- var fs=$("f_start");fs.disabled=!st.day||!starts.length;fs.innerHTML='<option value="">'+(st.day?(starts.length?"Pick a time":"Fully booked"):"Pick a day first")+"</option>"+starts.map(function(s){return '<option value="'+s+'"'+(String(s)===st.start?" selected":"")+">"+t12(s)+"</option>";}).join("");
- var s0=+st.start,bay=st.start?freeBay(st.day,s0):0;
- $("block").textContent=st.start?t12(s0)+" – "+t12(s0+dur)+" ("+(dur/60).toFixed(1)+" hrs), Bay "+bay:(dur/60).toFixed(1)+" hrs";
- var over=st.start!==""&&s0+dur>CLOSE;$("overClose").classList.toggle("hide",!over);if(over)$("overClose").textContent="Runs past close: this block ends at "+t12(s0+dur)+"; the vehicle would stay overnight.";
- var vErr=vinErr($("f_vin").value),nm=$("f_name").value,ph=$("f_phone").value,em=$("f_email").value;
- var ready=!!g&&st.model_year!==""&&mileOk&&vErr===""&&chosen.length>0&&st.day!==""&&st.start!==""&&nm!==""&&(ph!==""||em!=="");
- $("reqBtn").disabled=!ready;
- calc={g:g,miles:miles,chosen:chosen,dur:dur,s0:s0,bay:bay,ours:partsT+laborT,dealer:dParts+dLabor,nm:nm,contact:ph||em};
-}
-$("reqBtn").onclick=function(){var c=calc;$("previewText").textContent=c.nm+": "+st.model_year+" "+c.g.plain+", "+c.miles.toLocaleString("en-US")+" mi. "+c.chosen.map(function(s){return s.name;}).join("; ")+". "+dayLabel(st.day)+", "+t12(c.s0)+" to "+t12(c.s0+c.dur)+" (Bay "+c.bay+"). Estimate "+usd(c.ours)+" vs dealer estimate "+usd(c.dealer)+". On the live site the shop would contact you at "+c.contact+" to confirm. This draft did not send or save anything.";$("bookForm").classList.add("hide");$("preview").classList.remove("hide");};
+// Booking stepper
+var INTERVALS={"range_rover_l405|v6":[["Engine oil & filter",16000,12],["Brake fluid",0,36],["Coolant",0,120],["Spark plugs",96000,72],["Air filter",32000,24],["Cabin (pollen) filter",16000,12],["Transmission (ZF 8HP) fluid & filter",160000,120],["Transfer case fluid",80000,60],["Front/rear differential (non-locking)",160000,120],["Supercharger drive belt",112000,84]],"range_rover_l405|v8":[["Engine oil & filter",16000,12],["Brake fluid",0,36],["Coolant",0,120],["Spark plugs",112000,84],["Air filter",32000,24],["Cabin (pollen) filter",16000,12],["Transmission (ZF 8HP) fluid & filter",160000,120],["Transfer case fluid",80000,60],["Front/rear differential (non-locking)",160000,120],["Supercharger drive belt",112000,84],["Fuel tank filter",160000,120]],"range_rover_l405|p400e":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_l405|p400":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l494|p300":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l494|v6":[["Engine oil & filter",16000,12],["Brake fluid",0,36],["Coolant",0,120],["Spark plugs",96000,72],["Air filter",32000,24],["Cabin (pollen) filter",16000,12],["Transmission (ZF 8HP) fluid & filter",160000,120],["Transfer case fluid",80000,60],["Front/rear differential (non-locking)",160000,120],["Supercharger drive belt",112000,84]],"range_rover_sport_l494|v8":[["Engine oil & filter",16000,12],["Brake fluid",0,36],["Coolant",0,120],["Spark plugs",112000,84],["Air filter",32000,24],["Cabin (pollen) filter",16000,12],["Transmission (ZF 8HP) fluid & filter",160000,120],["Transfer case fluid",80000,60],["Front/rear differential (non-locking)",160000,120],["Supercharger drive belt",112000,84],["Fuel tank filter",160000,120]],"range_rover_sport_l494|p400e":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l494|p400":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"defender_l663|p300":[["Engine oil & filter",16000,24],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",30000,24],["Coolant",150000,120],["Transmission (ZF 8HP) fluid",30000,0],["Transfer case fluid",75000,60],["Differential fluids",75000,60],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0]],"defender_l663|p400":[["Engine oil & filter",16000,24],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",30000,24],["Coolant",150000,120],["Transmission (ZF 8HP) fluid",30000,0],["Transfer case fluid",75000,60],["Differential fluids",75000,60],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0]],"defender_l663|p525":[["Engine oil & filter",16000,12],["Brake fluid",30000,24],["Coolant",150000,120],["Transmission (ZF 8HP) fluid",30000,0],["Transfer case fluid",75000,60],["Differential fluids",75000,60],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0]],"defender_l663|p400e":[["Engine oil & filter",16000,24],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",30000,24],["Coolant",150000,120],["Transmission (ZF 8HP) fluid",30000,0],["Transfer case fluid",75000,60],["Differential fluids",75000,60],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0]],"range_rover_l460|p400":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_l460|p440e":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_l460|p530":[["Engine oil & filter",0,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_l460|p615":[["Engine oil & filter",0,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l461|p400":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l461|p440e":[["Engine oil & filter",16000,0],["Engine oil & filter — Shop recommendation",8000,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l461|p530":[["Engine oil & filter",0,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]],"range_rover_sport_l461|p635":[["Engine oil & filter",0,0],["Brake fluid",0,0],["Coolant",0,0],["Spark plugs",0,0],["Air filter",0,0],["Cabin (pollen) filter",0,0],["Transmission (ZF 8HP) fluid",0,0],["Transfer case fluid",0,0],["Differential fluids",0,0]]};
+var B={kind:"",step:1,vm:"vin",gid:"",engine:"",year:"",make:"",model:"",other:false,miles:NaN,items:[],ours:0,quoted:false,dur:60};
+var ITEM_PRICE={"Brake fluid":"brake","Coolant":"cool","Spark plugs":"plugs","Air filter":"air","Cabin (pollen) filter":"cabin","Transmission (ZF 8HP) fluid & filter":"zf","Transmission (ZF 8HP) fluid":"zf","Transfer case fluid":"diff","Front/rear differential (non-locking)":"diff","Differential fluids":"diff"};
+var ITEM_NAME={"Transfer case fluid":"Transfer case + differential fluids","Front/rear differential (non-locking)":"Transfer case + differential fluids","Differential fluids":"Transfer case + differential fluids"};
+var LR_MODELS=["Range Rover","Range Rover Sport","Defender"];
+function lrGid(model,y){y=+y;if(model==="Range Rover")return y>=2023?"range_rover_l460":y>=2013?"range_rover_l405":"";if(model==="Range Rover Sport")return y>=2023?"range_rover_sport_l461":y>=2014?"range_rover_sport_l494":"";if(model==="Defender")return y>=2020?"defender_l663":"";return "";}
+function G(id){return GENS.filter(function(g){return g.id===id;})[0];}
+function showStep(n){B.step=n;document.querySelectorAll("#bookForm [data-st]").forEach(function(s){s.classList.toggle("hide",+s.getAttribute("data-st")!==n);});$("dots").innerHTML=[1,2,3,4,5].map(function(i){return '<span class="'+(i<=n?"on":"")+'"></span>';}).join("");window.scrollTo(0,$("bookForm").getBoundingClientRect().top+window.scrollY-120);}
+document.querySelectorAll("[data-back]").forEach(function(b){b.onclick=function(){showStep(B.step-1);};});
+document.querySelectorAll("[data-kind]").forEach(function(b){b.onclick=function(){B.kind=b.getAttribute("data-kind");$("svcBox").classList.toggle("hide",B.kind!=="service");$("diagBox").classList.toggle("hide",B.kind!=="diag");$("b_h4").innerHTML='<span class="num">4</span>'+(B.kind==="service"?"Service due at your mileage":"What's going on?");showStep(2);};});
+document.querySelectorAll("[data-vm]").forEach(function(b){b.onclick=function(){B.vm=b.getAttribute("data-vm");document.querySelectorAll("[data-vm]").forEach(function(x){x.classList.toggle("on",x===b);});$("vinBox").classList.toggle("hide",B.vm!=="vin");$("manBox").classList.toggle("hide",B.vm!=="manual");};});
+(function(){var y='<option value="">Select year</option>';for(var i=2026;i>=2005;i--)y+="<option>"+i+"</option>";$("b_year").innerHTML=y;})();
+function fillModels(){var lr=$("b_make").value==="Land Rover";$("b_modelWrap").classList.toggle("hide",!lr);$("b_modelTxtWrap").classList.toggle("hide",lr||!$("b_make").value);
+ if(lr&&!$("b_model").options.length)$("b_model").innerHTML='<option value="">Select model</option>'+LR_MODELS.map(function(m){return "<option>"+m+"</option>";}).join("");}
+function fillEngines(keep){var gid=$("b_make").value==="Land Rover"?lrGid($("b_model").value,$("b_year").value):"",g=G(gid);$("b_engWrap").classList.toggle("hide",!g);
+ if(g){var cur=keep||$("b_engine").value;$("b_engine").innerHTML='<option value="">Not sure — we\'ll check</option>'+g.engines.map(function(e){return '<option value="'+e.id+'">'+esc(e.label)+"</option>";}).join("");if(g.engines.some(function(e){return e.id===cur;}))$("b_engine").value=cur;}}
+function readVehicle(){B.year=$("b_year").value;B.make=$("b_make").value;B.model=B.make==="Land Rover"?$("b_model").value:$("b_modelTxt").value.trim();B.other=!!B.make&&B.make!=="Land Rover";B.gid=B.make==="Land Rover"?lrGid(B.model,B.year):"";B.engine=B.gid?$("b_engine").value:"";
+ var ok=B.year&&B.make&&B.model&&(B.other||B.gid),s=$("b_vehSum");
+ if(B.make==="Land Rover"&&B.model&&B.year&&!B.gid){s.textContent="We service the "+B.model+" from "+(B.model==="Defender"?"2020":B.model==="Range Rover"?"2013":"2014")+" on. Please call us about older models.";}
+ else if(ok){var g=G(B.gid),e=g&&g.engines.filter(function(x){return x.id===B.engine;})[0];s.innerHTML="<b>Your vehicle:</b> "+esc(B.year+" "+B.make+" "+B.model)+(g?" ("+esc(g.plain)+")":"")+(e?", "+esc(e.label):B.gid?", engine not sure":"")+'. Not right? Use "Select year / make / model" to correct it.'+(B.other?" We handle routine and annual service on this make; anything beyond that, please call us.":"");}
+ else s.textContent=B.vm==="vin"?"Look up your VIN, or select year, make and model.":"Select year, make and model.";
+ $("b_next2").disabled=!ok;}
+["b_year","b_make","b_model","b_engine"].forEach(function(id){$(id).onchange=function(){fillModels();if(id!=="b_engine")fillEngines();readVehicle();};});
+$("b_modelTxt").oninput=readVehicle;
+$("b_vin").oninput=function(e){e.target.value=e.target.value.toUpperCase().replace(/\s/g,"");};
+function setManual(y,make,model,eng){$("b_year").value=y||"";$("b_make").value=make||"";fillModels();if(make==="Land Rover")$("b_model").value=model||"";else $("b_modelTxt").value=model||"";fillEngines(eng);if(eng)$("b_engine").value=eng;readVehicle();}
+function mapEngine(gid,r){var L=parseFloat(r.DisplacementL)||0,cyl=+r.EngineCylinders||0,el=(r.ElectrificationLevel||"")+" "+(r.FuelTypeSecondary||""),phev=/PHEV|Plug|Electric/i.test(el),cfg=r.EngineConfiguration||"",g=G(gid);if(!g)return "";
+ var has=function(id){return g.engines.some(function(e){return e.id===id;});};
+ if(phev)return has("p400e")?"p400e":has("p440e")?"p440e":"";
+ if(L>=4.3&&L<4.5)return has("p530")?"p530":"";
+ if(L>=4.9)return has("v8")?"v8":has("p525")?"p525":"";
+ if(L>=1.9&&L<2.1)return has("p300")?"p300":"";
+ if(L>=2.9&&L<3.1){if(/V/i.test(cfg)||(/supercharg/i.test((r.OtherEngineInfo||"")+(r.Turbo||"")))&&has("v6"))return "v6";return has("p400")?"p400":"";}
+ return "";}
+var MAKES={"LAND ROVER":"Land Rover","JAGUAR":"Jaguar","PORSCHE":"Porsche","BMW":"BMW","MERCEDES-BENZ":"Mercedes-Benz"};
+$("b_decode").onclick=function(){var v=$("b_vin").value,err=vinErr(v),n=$("b_vinNote");if(!v||err){n.textContent=err||"Enter all 17 characters.";return;}
+ n.textContent="Looking up your VIN…";$("b_decode").disabled=true;
+ var done=function(){$("b_decode").disabled=false;};
+ var ctl=window.AbortController?new AbortController():null;var to=setTimeout(function(){if(ctl)ctl.abort();},10000);
+ fetch("https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/"+encodeURIComponent(v)+"?format=json",ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){clearTimeout(to);done();
+  var r=j&&j.Results&&j.Results[0]||{},mk=MAKES[(r.Make||"").toUpperCase()],y=r.ModelYear||"",md=(r.Model||"").trim();
+  if(!mk){n.textContent=r.Make?"This VIN is a "+r.Make+". We service Land Rover, plus routine service on Jaguar, Porsche, BMW and Mercedes-Benz. Please call us.":"We couldn't read that VIN. Please select your year, make and model.";document.querySelector('[data-vm=manual]').click();setManual(y,"","","");return;}
+  var model=md;if(mk==="Land Rover"){model=/sport/i.test(md)?"Range Rover Sport":/defender/i.test(md)?"Defender":/range rover/i.test(md)&&!/velar|evoque/i.test(md)?"Range Rover":"";}
+  if(mk==="Land Rover"&&!model){n.textContent="We found a "+y+" "+md+". We currently service the Range Rover, Range Rover Sport and Defender. Please call us.";return;}
+  var gid=mk==="Land Rover"?lrGid(model,y):"",eng=mapEngine(gid,r);
+  document.querySelector('[data-vm=manual]').click();setManual(y,mk,model,eng);
+  n.textContent="";$("b_vehSum").innerHTML+=" <i>(Decoded from your VIN. Please check it.)</i>";
+ }).catch(function(){clearTimeout(to);done();n.textContent="VIN lookup isn't available right now. Please select your year, make and model instead.";document.querySelector('[data-vm=manual]').click();});};
+$("b_next2").onclick=function(){showStep(3);};
+$("b_miles").oninput=function(){var v=$("b_miles").value,m=parseInt(v,10);B.miles=m;$("b_next3").disabled=!(v!==""&&isFinite(m)&&m>=0);};
+$("b_next3").onclick=function(){if(B.kind==="service")buildService();showStep(4);};
+(function(){var w=$("b_sym");SYMPTOMS.forEach(function(s){var l=document.createElement("label");l.className="chk";l.innerHTML='<input type="checkbox" value="'+s.id+'"> '+esc(s.label);w.appendChild(l);});})();
+function dueMiles(M,N){if(!N)return false;var k=Math.round(M/N);return k>=1&&Math.abs(M-k*N)<=3000;}
+function dueAge(age,mo){if(!mo||age<=0)return false;var am=age*12;return am>=mo-6&&(am%mo<12||mo-(am%mo)<=6);}
+function buildService(){
+ var M=B.miles,g=G(B.gid),rows=[],tbc=[],notes=[],age=Math.max(0,2026-(+B.year||2026));
+ var eng=g&&g.engines.filter(function(e){return e.id===B.engine;})[0],tag=eng?eng.tag:"i6",ingen=/^(i4|i6|phev4|phev6)$/.test(tag);
+ var priced=!!g&&!g.quote&&!B.other&&!!eng,svc=g?services(tag,g.id,true):[];
+ function price(id){if(!priced)return null;var s=svc.filter(function(x){return x.id===id;})[0];return s?{hrs:s.hrs,cost:s.hrs*RATE+s.parts}:null;}
+ var o=price("oil");rows.push({name:"Annual oil service + multi-point inspection",why:"Every visit",p:o});
+ if(ingen&&g)notes.push("Oil: the factory interval is 16,000 mi. For Ingenium engines we recommend about every 8,000 mi, especially with mostly city driving, so that's what we show here.");
+ if(g&&eng){var iv=INTERVALS[g.id+"|"+eng.id]||[],seen={};
+  iv.forEach(function(r){var item=r[0],N=r[1],mo=r[2];if(/^Engine oil/.test(item)||/^Model-year/.test(item))return;
+   var nm=ITEM_NAME[item]||item;if(seen[nm])return;
+   if(!N&&!mo){tbc.push(nm);return;}
+   var why=dueMiles(M,N)?"Due around "+(Math.round(M/N)*N).toLocaleString("en-US")+" mi":dueAge(age,mo)?"Due by age (every "+(mo/12)+" yrs)":"";if(!why)return;
+   seen[nm]=1;var pid=ITEM_PRICE[item];rows.push({name:nm,why:why,p:pid?price(pid):null});});}
+ else if(g)tbc.push("Other scheduled items (we'll confirm your engine)");
+ if(B.other)notes.push("We service "+B.make+" vehicles for routine and annual service. Your technician confirms what's due and we'll call with a quote.");
+ if(g&&g.quote)notes.push("Prices for 2023+ models are quoted after review.");
+ if(eng&&/phev/.test(tag))notes.push("Plug-in hybrid: we handle routine service. High-voltage battery, charging and hybrid-system work goes to a Land Rover dealer and is often covered under extended warranty.");
+ if(g&&eng&&!priced&&!g.quote)notes.push("");
+ var tot=0,q=false,hrs=0;rows.forEach(function(r){if(r.p){tot+=r.p.cost;hrs+=r.p.hrs;}else q=true;});
+ B.items=rows;B.ours=tot;B.quoted=q;B.dur=Math.max(60,Math.ceil((hrs||1.5)*2)*30);
+ $("b_svcIntro").textContent="Based on "+(B.year+" "+B.make+" "+B.model).trim()+" at "+M.toLocaleString("en-US")+" mi, using the factory schedule. Your technician confirms everything before any work.";
+ var body=rows.map(function(r){return [{html:"<b>"+esc(r.name)+"</b><br><span class=\"foot\">"+esc(r.why)+"</span>"},r.p?usd(r.p.cost)+" (estimate)":"Quoted after review"];});
+ body.push([{html:"<b>Estimated total</b>"},{html:"<b>"+(tot?usd(tot)+" (estimate)":"Quoted after review")+(tot&&q?" + items quoted after review":"")+"</b>"}]);
+ table($("b_items"),["Item","Our est. ($175/hr)"],body,[1]);
+ $("b_tbc").textContent=tbc.length?"Your technician will also check these (interval to be confirmed, quoted after review): "+tbc.join(", ")+".":"";
+ notes=notes.filter(Boolean);$("b_notes").innerHTML=notes.map(esc).join("<br>");$("b_notes").classList.toggle("hide",!notes.length);}
+function btype(){return B.kind==="diag"?"diag_repair":"annual_service";}
+function cnt(d,k){return BOOKED.filter(function(a){return a.day===d&&a.kind===k;}).length;}
+function dFull(d){return btype()==="diag_repair"?cnt(d,"diag_repair")>=CAPACITY.capacity_diag:cnt(d,"annual_service")>=CAPACITY.capacity_annual_max;}
+function dLim(d){return btype()==="annual_service"&&cnt(d,"annual_service")>=CAPACITY.capacity_annual_ideal&&!dFull(d);}
+$("b_next4").onclick=function(){$("b_day").innerHTML='<option value="">Pick a day</option>'+DAYS.filter(function(d){return !dFull(d);}).map(function(d){return '<option value="'+d+'">'+dayLabel(d)+(dLim(d)?" (limited)":"")+"</option>";}).join("");
+ $("b_dayNote").textContent=(B.kind==="diag"?DIAG_NOTICE+" One diagnosis or repair vehicle per day.":ANNUAL_NOTICE+" Days marked limited have one annual-service spot left.")+" Fully booked days aren't shown.";chk5();showStep(5);};
+function chk5(){$("reqBtn").disabled=!($("b_day").value&&$("b_name").value.trim()&&$("b_contact").value.trim());}
+["b_day","b_name","b_contact"].forEach(function(id){$(id).oninput=chk5;$(id).onchange=chk5;});
+$("reqBtn").onclick=function(){var veh=(B.year+" "+B.make+" "+B.model).trim(),x;
+ if(B.kind==="service")x="Scheduled service: "+B.items.map(function(r){return r.name;}).join("; ")+". Estimated total: "+(B.ours?usd(B.ours)+" (estimate)"+(B.quoted?" + items quoted after review":""):"quoted after review")+"."+($("b_extra").value.trim()?" You added: "+$("b_extra").value.trim():"");
+ else{var s=[].map.call(document.querySelectorAll("#b_sym input:checked"),function(i){return i.parentNode.textContent.trim();});x="Diagnosis / repair. "+(s.length?"Symptoms: "+s.join("; ")+". ":"")+($("b_desc").value.trim()?"Description: "+$("b_desc").value.trim()+". ":"")+"We'll call with findings and a quote before any work.";}
+ $("previewText").textContent=$("b_name").value.trim()+": "+veh+", "+B.miles.toLocaleString("en-US")+" mi. "+x+" Preferred day: "+dayLabel($("b_day").value)+". On the live site the shop would contact you at "+$("b_contact").value.trim()+" to confirm. This draft did not send or save anything.";
+ $("bookForm").classList.add("hide");$("preview").classList.remove("hide");};
 $("restart").onclick=function(){location.reload();};
+function render(){}
+readVehicle();showStep(1);
+
 
 // Rules, schema, tokens
 if($("rulesTable"))table($("rulesTable"),["Rule ID","When","Suggests"],PLACEHOLDER_RULES.map(function(r){return [r.id,r.when,r.services.join(", ")];}));
