@@ -187,12 +187,13 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
       <li><b>Fluids and filters</b>: brake fluid, cabin and engine air filters, differential and transfer case, ZF transmission, coolant</li>
       <li><b>Spark plugs</b>: OE-supplier plugs at the scheduled interval</li>
       <li><b>Air suspension health check</b>: leak-down test, compressor duty, ride height</li>
-      <li><b>Plug-in hybrids (PHEV)</b>: we handle routine service. High-voltage battery, charging and hybrid-system work goes to a Land Rover dealer and is often covered under extended warranty.</li></ul></div>
+      <li><b>Plug-in hybrids (PHEV)</b>: we handle routine service. High-voltage battery, charging and hybrid-system work goes to a Land Rover dealer and is often covered under extended warranty.</li></ul>
+      <div class="notice"><span class="turn-annual"></span></div></div>
     <div class="card"><h3>Diagnosis and repair: also offered</h3><ul class="list">
       <li><b>Air suspension repair</b>: air springs, compressors and valve blocks</li>
       <li><b>Engine and cooling</b>: timing chains, coolant pipes, water pumps, supercharger couplers, oil leaks</li>
       <li><b>Brakes</b>: front pads and rotors with OE-supplier parts</li></ul>
-      <div class="notice"><span class="turn"></span> One diagnosis or repair vehicle is booked per day.</div></div>
+      <div class="notice"><span class="turn-diag"></span> One diagnosis or repair vehicle is booked per day.</div></div>
   </div>
   <p>Recalls and factory-warranty repairs are done free by authorized dealers; we will check your VIN for open recalls and send you there when that applies.</p>
   <div class="end-cta"><button class="btn btn-primary" data-go="book">Book Service</button></div>
@@ -379,7 +380,7 @@ function table(el,cols,rows,numCols){numCols=numCols||[];var h="<tr>"+cols.map(f
 var sel=$("nameSel");NAMES.forEach(function(n){var o=document.createElement("option");o.value=n.id;o.textContent=n.name+(n.id==="a"?" (working name)":"");sel.appendChild(o);});
 function applyName(){var n=NAMES.filter(function(x){return x.id===sel.value;})[0];document.querySelectorAll(".nm").forEach(function(e){e.textContent=n.name;});$("nameNote").textContent=n.note;}
 sel.value="a";sel.onchange=applyName;applyName();
-document.querySelectorAll(".turn").forEach(function(e){e.textContent=TURNAROUND;});
+document.querySelectorAll(".turn").forEach(function(e){e.textContent=TURNAROUND;});document.querySelectorAll(".turn-annual").forEach(function(e){e.textContent=ANNUAL_NOTICE;});document.querySelectorAll(".turn-diag").forEach(function(e){e.textContent=DIAG_NOTICE;});
 
 // Tabs
 function go(t){document.querySelectorAll("[data-page]").forEach(function(p){p.classList.toggle("hide",p.getAttribute("data-page")!==t);});document.querySelectorAll("nav .tab").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-tab")===t);});window.scrollTo(0,0);}
