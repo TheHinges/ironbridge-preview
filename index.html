@@ -183,7 +183,7 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
   <div class="rule"></div><h2>Services</h2>
   <div class="grid g2">
     <div class="card"><h3>Annual service: our main work</h3><ul class="list">
-      <li><b>Annual oil service + multi-point inspection</b>: factory-schedule service with genuine or OE-supplier parts (intervals: owner to verify)</li>
+      <li><b>Annual oil service + multi-point inspection</b>: factory-schedule service with genuine or OE-supplier parts</li>
       <li><b>Fluids and filters</b>: brake fluid, cabin and engine air filters, differential and transfer case, ZF transmission, coolant</li>
       <li><b>Spark plugs</b>: OE-supplier plugs at the scheduled interval</li>
       <li><b>Air suspension health check</b>: leak-down test, compressor duty, ride height</li>
@@ -212,7 +212,7 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
 <!-- PRICING -->
 <div data-page="pricing" class="hide"><section class="block"><div class="wrap">
   <div class="rule"></div><h2>Pricing: us versus the dealer</h2>
-  <p class="foot">All figures are estimates for the owner to verify. Dealer column: same hours at $295/hr and parts at 2.1x our parts price (estimate). The $295/hr dealer rate is an estimate. Sales tax excluded.</p>
+  <p class="foot">All figures are estimates. Dealer column: same hours at $295/hr and parts at 2.1x our parts price (estimate). The $295/hr dealer rate is an estimate. Sales tax excluded.</p>
   <div class="tablewrap"><table id="priceTable"></table></div>
   <div class="tablewrap" style="margin-top:20px"><table id="cmpTable">
     <tr><th></th><th class="nm">Ironbridge Service Works</th><th>Dealer</th></tr>
@@ -228,8 +228,8 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
 <div data-page="about" class="hide"><section class="block"><div class="wrap">
   <div class="rule"></div><h2>About</h2>
   <p><span class="nm">Ironbridge Service Works</span> is owner-operated by a professional Land Rover technician with dealer service experience and a past shop of his own. Your vehicle is worked on by the owner, following factory procedures and torque specs.</p>
-  <div class="notice warn"><strong>Owner to fill in:</strong> real credentials, years of experience and photos go here.</div>
-  <div class="grid g2"><div class="card"><h3>Location</h3><p>Blue Ash, OH (candidate space, not final)</p></div><div class="card"><h3>Hours</h3><p>Mon–Fri 8:00 AM – 5:00 PM (placeholder, matches the shop calendar)</p></div></div>
+  
+  <div class="grid g2"><div class="card"><h3>Location</h3><p>Blue Ash, OH (candidate space, not final)</p></div><div class="card"><h3>Hours</h3><p>Mon–Fri 8:00 AM – 5:00 PM</p></div></div>
   <div class="end-cta"><button class="btn btn-primary" data-go="book">Book Service</button></div>
 </div></section></div>
 
@@ -250,13 +250,13 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
         <div class="field" id="airWrap"><label for="f_air">Air suspension</label><select id="f_air"><option value="not_sure">Not sure — we'll check</option><option value="yes">Yes</option><option value="no">No (coil springs)</option></select></div>
         <div class="field"><label for="f_vin">VIN (optional)</label><input id="f_vin" placeholder="SAL..." maxlength="17"></div>
       </div>
-      <button class="btn btn-secondary btn-sm" id="vinBtn" type="button">Prefill from VIN (placeholder decoder)</button>
+      <button class="btn btn-secondary btn-sm" id="vinBtn" type="button">Prefill from VIN</button>
       <p class="foot" id="vinNote"></p></div>
     <div class="step hide" id="s3"><h3><span class="num">3</span>Anything you've noticed? (optional)</h3>
       <div class="grid g2"><div id="symptoms"></div>
         <div class="field"><label for="f_last">Last serviced</label><select id="f_last"></select></div></div></div>
     <div class="step hide" id="s4"><h3><span class="num">4</span>Services</h3>
-      <p class="foot">Recommendations come from placeholder rules the owner will set. Engine-specific jobs appear once an engine is chosen or the tech confirms it.</p>
+      <p class="foot">Suggestions are based on your answers; your technician confirms everything. Engine-specific jobs appear once an engine is chosen or the tech confirms it.</p>
       <div id="recs"></div>
       <div class="seg"><button class="btn btn-secondary btn-sm on" data-grp="Maintenance">Maintenance</button><button class="btn btn-secondary btn-sm" data-grp="Common repairs">Common repairs</button></div>
       <div class="tablewrap"><table id="svcTable"></table></div></div>
@@ -280,12 +280,9 @@ td .pill{display:inline-block;margin:6px 0 0;border-radius:12px;padding:3px 10px
   </div>
   <div id="preview" class="hide"><div class="notice"><strong>Request preview — nothing was sent.</strong><p id="previewText"></p></div><button class="btn btn-secondary" id="restart" type="button">Start over</button></div>
 
-  <details><summary>Placeholder recommendation rules (owner to define)</summary><p class="foot">Placeholder data, not advice. Mileage thresholds are TBD by owner; 60,000 and 100,000 are stand-ins so the demo runs.</p><div class="tablewrap"><table id="rulesTable"></table></div></details>
-  <details><summary>Intake schema (for advisor sync)</summary><div class="tablewrap"><table id="schemaTable"></table></div></details>
 </div></section></div>
 </main>
 
-<section class="block alt"><div class="wrap"><details><summary>Brand tokens (shared with advisor)</summary><div class="tablewrap"><table id="tokTable"></table></div></details></div></section>
 
 <footer><div class="wrap">
   <div class="brand nm">Ironbridge Service Works</div>
@@ -410,7 +407,7 @@ $("f_year").onchange=function(e){st.model_year=e.target.value;render();};
 $("f_mileage").oninput=render;
 $("f_engine").onchange=function(e){st.engine=e.target.value;st.picked=[];st.start="";render();};
 $("f_vin").oninput=function(e){e.target.value=e.target.value.toUpperCase().replace(/\s/g,"");render();};
-$("vinBtn").onclick=function(){var v=$("f_vin").value,err=vinErr(v);if(err||!v){$("vinNote").textContent=err||"Enter a 17-character VIN first.";return;}var d=stubDecodeVin(v),g=gen();if(d.model_year&&g&&g.years.indexOf(+d.model_year)>=0){st.model_year=d.model_year;$("f_year").value=d.model_year;}st.engine=d.engine;$("f_engine").value=d.engine;st.air_suspension=d.air_suspension;if($("f_air").tagName)$("f_air").value=d.air_suspension;$("vinNote").textContent="Placeholder decoder: "+(d.model_year?"year "+d.model_year+" read from the VIN":"year not read")+"; engine and air suspension left as \"Not sure — we'll check\". A real decoder is not connected.";render();};
+$("vinBtn").onclick=function(){var v=$("f_vin").value,err=vinErr(v);if(err||!v){$("vinNote").textContent=err||"Enter a 17-character VIN first.";return;}var d=stubDecodeVin(v),g=gen();if(d.model_year&&g&&g.years.indexOf(+d.model_year)>=0){st.model_year=d.model_year;$("f_year").value=d.model_year;}st.engine=d.engine;$("f_engine").value=d.engine;st.air_suspension=d.air_suspension;if($("f_air").tagName)$("f_air").value=d.air_suspension;$("vinNote").textContent="From your VIN: "+(d.model_year?"year "+d.model_year+" read from the VIN":"year not read")+"; engine and air suspension left as \"Not sure — we'll check\". A real decoder is not connected.";render();};
 document.querySelectorAll("[data-grp]").forEach(function(b){b.onclick=function(){st.grp=b.getAttribute("data-grp");document.querySelectorAll("[data-grp]").forEach(function(x){x.classList.toggle("on",x===b);});render();};});
 function toggleSvc(id){st.picked=st.picked.indexOf(id)>=0?st.picked.filter(function(x){return x!==id;}):st.picked.concat([id]);st.start="";render();}
 document.addEventListener("click",function(e){var b=e.target.closest("[data-svc]");if(b)toggleSvc(b.getAttribute("data-svc"));});
@@ -466,10 +463,10 @@ $("reqBtn").onclick=function(){var c=calc;$("previewText").textContent=c.nm+": "
 $("restart").onclick=function(){location.reload();};
 
 // Rules, schema, tokens
-table($("rulesTable"),["Rule ID","When","Suggests"],PLACEHOLDER_RULES.map(function(r){return [r.id,r.when,r.services.join(", ")];}));
-table($("schemaTable"),["Field","ID","Values"],[
+if($("rulesTable"))table($("rulesTable"),["Rule ID","When","Suggests"],PLACEHOLDER_RULES.map(function(r){return [r.id,r.when,r.services.join(", ")];}));
+if($("schemaTable"))table($("schemaTable"),["Field","ID","Values"],[
  ["Model","vehicle_model","range_rover_l405 | range_rover_sport_l494 | defender_l663"],["Year","model_year","2013–2022 (L405), 2014–2022 (L494), 2020–2026 (L663)"],["Mileage (required)","mileage","whole number"],["Engine (optional)","engine","not_sure | v6 | v8 | p400e | p400 | p300 | p525"],["Air suspension (optional)","air_suspension","not_sure | yes | no"],["VIN (optional)","vin","17 characters"],["Symptoms","symptoms",SYMPTOMS.map(function(s){return s.id;}).join(" | ")],["Last serviced","last_serviced",LAST_SERVICED.map(function(s){return s.value;}).join(" | ")],["Services","selected_services","oil | brake | cabin | air | diff | zf | cool | plugs | airsusp | bag | comp | cpipe | wp | tc | sc | leak | brakes"],["Recommended (read-only)","recommended_services","service IDs from rule IDs: "+PLACEHOLDER_RULES.map(function(r){return r.id;}).join(", ")],["Day","appointment_day","YYYY-MM-DD"],["Start time","appointment_start","minutes after midnight, 30-min steps (shown 12-hour)"],["Bay","bay","1 | 2"],["Name","customer_name","text"],["Phone","customer_phone","text"],["Email","customer_email","text"],["History hook","getServiceHistory(vin)","returns [] until connected"],["Booking type","booking_type","annual_service | diag_repair (diag_repair if any selected service is diag_repair)"],["Service class: annual_service","service_class",ANNUAL_IDS.join(", ")],["Service class: diag_repair","service_class",DIAG_IDS.join(", ")],["Capacity","capacity_annual_ideal",String(CAPACITY.capacity_annual_ideal)],["Capacity","capacity_annual_max",CAPACITY.capacity_annual_max+" (3rd shown as limited)"],["Capacity","capacity_diag",CAPACITY.capacity_diag+" per day"],["Job status (future hook, not shown to customers yet)","job_status",JOB_STATUS_IDS.join(" | ")]]);
-table($("tokTable"),["Token","Value","Use"],BRAND_TOKENS.map(function(t){return [t[0],{html:(t[1].charAt(0)==="#"?'<span style="display:inline-block;width:14px;height:14px;border:1px solid #999;vertical-align:middle;margin-right:6px;background:'+t[1]+'"></span>':"")+esc(t[1])},t[2]];}));
+if($("tokTable"))table($("tokTable"),["Token","Value","Use"],BRAND_TOKENS.map(function(t){return [t[0],{html:(t[1].charAt(0)==="#"?'<span style="display:inline-block;width:14px;height:14px;border:1px solid #999;vertical-align:middle;margin-right:6px;background:'+t[1]+'"></span>':"")+esc(t[1])},t[2]];}));
 labelTable($("cmpTable"));render();
 })();
 </script>
